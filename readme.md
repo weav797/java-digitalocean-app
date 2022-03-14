@@ -17,3 +17,5 @@ Related projects:
 - [java-webpack-example](https://github.com/mendlik/java-webpack-example) - Advanced example showing how to use a module bundler in  a Java project.
 
 Tip: [How to enable LiveReload in IntelliJ](http://stackoverflow.com/a/35895848/2284884)
+
+This project uses gradle version: 7.4

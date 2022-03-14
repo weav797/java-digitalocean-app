@@ -3,7 +3,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE'
+    classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.6.4'
   }
 }
 
@@ -19,13 +19,13 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-  compile(
-      "org.springframework.boot:spring-boot-starter-web",
-      "org.springframework.boot:spring-boot-devtools"
+  implementation(
+      "org.springframework.boot:spring-boot-starter-web:2.6.4",
+      "org.springframework.boot:spring-boot-devtools:2.6.4"
   )
-  testCompile(
-      "org.springframework.boot:spring-boot-starter-test",
-      "org.spockframework:spock-spring:1.0-groovy-2.4"
+  testImplementation(
+      "org.springframework.boot:spring-boot-starter-test:2.6.4",
+      "org.spockframework:spock-spring:2.1-groovy-3.0"
   )
 }
 
@@ -34,8 +34,4 @@ tasks.withType(Test) {
     exceptionFormat = 'full'
     events 'passed', 'skipped', 'failed'
   }
-}
-
-task wrapper(type: Wrapper) {
-  gradleVersion = '3.5'
 }

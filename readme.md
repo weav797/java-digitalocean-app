@@ -20,5 +20,5 @@ Tip: [How to enable LiveReload in IntelliJ](http://stackoverflow.com/a/35895848/
 
 This project uses gradle version: 7.4
 
-
+<hr/>
 Original project can be found here: https://github.com/pmendelski/java-react-example 

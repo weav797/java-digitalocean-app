@@ -1,3 +1,20 @@
+# java-digitalocean-app<br /><br />
+
+This is a demonstration of deploying a Java gradle app on DigitalOcean. Source: Techworld with Nana bootcamp<br /><br />
+
+## Demo Project:
+Create server and deploy application on DigitalOcean
+
+## Technologies used: 
+DigitalOcean,  Linux,  Java, Gradle
+
+## Project Description:
+Setup and configure a server on DigitalOceanCreate and configure a new Linux user on the Droplet(Security best practice)Deploy and run a Java Gradle application on Droplet<br /><br />
+
+**Module 5**:    _Cloud & Infrastructure as Service Basics_<br /><br /><br /><br />
+
+More notes down below.
+
 # Java-React Example
 
 An example of how to use JS frontend to consume an endpoint written in Java.

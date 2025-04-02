@@ -1,19 +1,86 @@
-# java-digitalocean-app<br /><br />
+# Java DigitalOcean App Deployment
 
-This is a demonstration of deploying a Java gradle app on DigitalOcean. Source: Techworld with Nana bootcamp<br /><br />
+## Overview
+This project demonstrates the process of deploying a Java Gradle application on a DigitalOcean Droplet. It is part of the **Techworld with Nana Bootcamp** under **Module 5: Cloud & Infrastructure as a Service Basics**.
 
-## Demo Project:
-Create server and deploy application on DigitalOcean
+## Technologies Used
+- **Cloud Provider:** DigitalOcean
+- **Operating System:** Linux (Ubuntu)
+- **Programming Language:** Java
+- **Build Tool:** Gradle
 
-## Technologies used: 
-DigitalOcean,  Linux,  Java, Gradle
+## Prerequisites
+Before deploying the application, ensure you have the following:
+- A **DigitalOcean account**
+- SSH access configured on your local machine
+- Basic knowledge of Linux commands
+- Java installed on the Droplet
 
-## Project Description:
-Setup and configure a server on DigitalOceanCreate and configure a new Linux user on the Droplet(Security best practice)Deploy and run a Java Gradle application on Droplet<br /><br />
+## Project Setup & Deployment
+This section covers the step-by-step deployment process.
 
-**Module 5**:    _Cloud & Infrastructure as Service Basics_<br /><br /><br /><br />
+### 1. Create a DigitalOcean Droplet
+The Droplet was created using the **DigitalOcean web interface**. The following configurations were applied:
+- **Image:** Ubuntu 24.10
+- **Size:** 1 vCPU, 512 MB RAM
+- **Region:** San Francisco
+- **Authentication:** SSH Key
 
-More notes down below.
+### 2. Configure Firewall Rules
+A firewall was set up with the following inbound rules:
+- **Port 22 (SSH):** Allowed only from my IP address for secure access
+- **Port 7071:** Open to all inbound traffic since the application listens on this port
+
+### 3. Connect to the Droplet
+```bash
+ssh root@IP_ADDRESS_REDACTED
+```
+
+### 4. Create a New User and Configure SSH Access (Security Best Practice)
+```bash
+
+adduser paul
+
+usermod -aG sudo paul
+
+su - paul
+```
+Set up SSH key authentication for the new user:
+```bash
+
+mkdir -p ~/.ssh
+
+sudo vim ~/.ssh/authorized_keys # Copy/paste the public SSH key
+
+cat ~/.ssh/authorized_keys
+```
+
+### 5. Install Java
+```bash
+apt update && apt install -y openjdk-8-jre-headless
+```
+
+### 6. Deploy the Application
+Since the application was built using Gradle on the local client machine, only the compiled JAR file needs to be transferred to the server. Use `scp` to copy the artifact:
+```bash
+scp build/libs/java-digitalocean-app.jar root@IP_ADDRESS_REDACTED:/root
+```
+SSH into the server and run the application:
+```bash
+java -jar java-digitalocean-app.jar
+```
+
+## Lessons Learned & Challenges
+- Setting up a secure DigitalOcean instance
+- Managing a Java Gradle project in a cloud environment
+
+## Reference
+- [DigitalOcean Documentation](https://docs.digitalocean.com)
+
+---
+This project is part of my bootcamp training and showcases my ability to deploy applications in a cloud environment.<br /><br /><br /><br />
+
+More notes down below from the original source of the repo.
 
 # Java-React Example
 
@@ -36,4 +103,4 @@ Related projects:
 Tip: [How to enable LiveReload in IntelliJ](http://stackoverflow.com/a/35895848/2284884)
 
 <hr/>
-Original project can be found here: https://github.com/pmendelski/java-react-example 
+Original project can be found here: https://github.com/pmendelski/java-react-example

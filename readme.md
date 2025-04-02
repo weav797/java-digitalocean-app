@@ -78,7 +78,7 @@ java -jar java-digitalocean-app.jar
 - [DigitalOcean Documentation](https://docs.digitalocean.com)
 
 ---
-This project is part of my bootcamp training and showcases my ability to deploy applications in a cloud environment.<br /><br /><br /><br />
+This project is part of my bootcamp training and showcases my ability to deploy applications in a cloud environment. For further details, I have attached a txt file if someone is curious to see what exact commands were used at what point.<br /><br /><br /><br />
 
 More notes down below from the original source of the repo.
 

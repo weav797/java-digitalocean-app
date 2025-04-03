@@ -1,0 +1,447 @@
+Cloning the git repo source from GitLab using Git Bash shell on Windows:
+
+  489  git clone --bare https://gitlab.com/twn-devops-bootcamp/latest/05-cloud/java-react-example
+  491  cd java-react-example.git
+
+	At this point, I created the repository on GitHub and renamed it to java-digitalocean-app.
+
+  492  eval `ssh-agent -s`
+  493  ssh-add /c/Users/Orion/.ssh/id_ed25519_twndemo
+  497  git push origin --delete main
+  498  git remote set-url --push origin git@github.com:weav797/java-digitalocean-app.git
+
+
+Building the file with Gradle and copying the artifact on the remote server:
+
+It says the build failed, although as you will see, the application runs perfectly. I am unsure as to why the build failed, but still produced the artifact with no issues.
+
+D:\projects\github\java-digitalocean-app>gradle build 
+
+> Task :compileJava
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+
+> Task :compileTestGroovy FAILED
+
+[Incubating] Problems report is available at: file:///D:/projects/github/java-digitalocean-app/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileTestGroovy'.
+> BUG! exception in phase 'semantic analysis' in source unit 'D:\projects\github\java-digitalocean-app\src\test\groovy\com\coditorium\sandbox\CountriesEndpointSpec.groovy' Unsupported class file major version 64
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.13/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 6s
+6 actionable tasks: 6 executed
+
+
+
+
+D:\projects\github\java-digitalocean-app\build\libs>scp java-digitalocean-app.jar root@24.144.83.13:/root
+java-digitalocean-app.jar                                                                        100%   17MB  14.7MB/s   00:01   
+
+
+Actual deployment of jar file and SSH setup:
+
+Passphrase for OpenSSH private key (new):
+Authenticating with public key "DigitalOcean nana demo"
+    +----------------------------------------------------------------------+
+    ¦                 • MobaXterm Personal Edition v24.4 •                 ¦
+    ¦               (SSH client, X server and network tools)               ¦
+    ¦                                                                      ¦
+    ¦ ? SSH session to root@24.144.83.13                                   ¦
+    ¦   • Direct SSH      :  ?                                             ¦
+    ¦   • SSH compression :  ?                                             ¦
+    ¦   • SSH-browser     :  ?                                             ¦
+    ¦   • X11-forwarding  :  ?  (remote display is forwarded through SSH)  ¦
+    ¦                                                                      ¦
+    ¦ ? For more info, ctrl+click on help or visit our website.            ¦
+    +----------------------------------------------------------------------+
+
+Welcome to Ubuntu 24.10 (GNU/Linux 6.11.0-9-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Wed Apr  2 21:04:41 UTC 2025
+
+  System load:  0.16              Processes:             106
+  Usage of /:   25.6% of 8.55GB   Users logged in:       0
+  Memory usage: 44%               IPv4 address for eth0: ip_redacted
+  Swap usage:   0%                IPv4 address for eth0: ip_redacted
+
+73 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+
+*** System restart required ***
+Last login: Mon Mar 31 23:50:01 2025 from ip_redacted
+/usr/bin/xauth:  file /root/.Xauthority does not exist
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# java
+Usage: java [-options] class [args...]
+           (to execute a class)
+   or  java [-options] -jar jarfile [args...]
+           (to execute a jar file)
+where options include:
+    -d32          use a 32-bit data model if available
+    -d64          use a 64-bit data model if available
+    -server       to select the "server" VM
+    -zero         to select the "zero" VM
+    -dcevm        to select the "dcevm" VM
+                  The default VM is server.
+
+    -cp <class search path of directories and zip/jar files>
+    -classpath <class search path of directories and zip/jar files>
+                  A : separated list of directories, JAR archives,
+                  and ZIP archives to search for class files.
+    -D<name>=<value>
+                  set a system property
+    -verbose:[class|gc|jni]
+                  enable verbose output
+    -version      print product version and exit
+    -version:<value>
+                  Warning: this feature is deprecated and will be removed
+                  in a future release.
+                  require the specified version to run
+    -showversion  print product version and continue
+    -jre-restrict-search | -no-jre-restrict-search
+                  Warning: this feature is deprecated and will be removed
+                  in a future release.
+                  include/exclude user private JREs in the version search
+    -? -help      print this help message
+    -X            print help on non-standard options
+    -ea[:<packagename>...|:<classname>]
+    -enableassertions[:<packagename>...|:<classname>]
+                  enable assertions with specified granularity
+    -da[:<packagename>...|:<classname>]
+    -disableassertions[:<packagename>...|:<classname>]
+                  disable assertions with specified granularity
+    -esa | -enablesystemassertions
+                  enable system assertions
+    -dsa | -disablesystemassertions
+                  disable system assertions
+    -agentlib:<libname>[=<options>]
+                  load native agent library <libname>, e.g. -agentlib:hprof
+                  see also, -agentlib:jdwp=help and -agentlib:hprof=help
+    -agentpath:<pathname>[=<options>]
+                  load native agent library by full pathname
+    -javaagent:<jarpath>[=<options>]
+                  load Java programming language agent, see java.lang.instrument
+    -splash:<imagepath>
+                  show splash screen with specified image
+See http://www.oracle.com/technetwork/java/javase/documentation/index.html for more details.
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# java -version
+openjdk version "1.8.0_442"
+OpenJDK Runtime Environment (build 1.8.0_442-8u442-b06~us1-0ubuntu1~24.10-b06)
+OpenJDK 64-Bit Server VM (build 25.442-b06, mixed mode)
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# history
+    1  java
+    2  apt get update
+    3  apt-get update
+    4  apt install openjdk-8-jre-headless
+    5  java
+    6  java -version
+    7  history
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# ls
+java-digitalocean-app.jar
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# java -jar java-digitalocean-app.jar
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.11)
+
+2025-04-02 21:09:43.614  INFO 22571 --- [           main] com.coditorium.sandbox.Application       : Starting Application using Java 1.8.0_442 on ubuntu-s-1vcpu-512mb-10gb-sfo3-01 with PID 22571 (/root/java-digitalocean-app.jar started by root in /root)
+2025-04-02 21:09:43.626  INFO 22571 --- [           main] com.coditorium.sandbox.Application       : No active profile set, falling back to 1 default profile: "default"
+2025-04-02 21:09:43.868  INFO 22571 --- [           main] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-04-02 21:09:48.810  INFO 22571 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 7071 (http)
+2025-04-02 21:09:48.871  INFO 22571 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-04-02 21:09:48.874  INFO 22571 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2025-04-02 21:09:49.414  INFO 22571 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-04-02 21:09:49.415  INFO 22571 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5544 ms
+2025-04-02 21:09:51.820  INFO 22571 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-04-02 21:09:52.556  INFO 22571 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 7071 (http) with context path ''
+2025-04-02 21:09:52.607  INFO 22571 --- [           main] com.coditorium.sandbox.Application       : Started Application in 11.114 seconds (JVM running for 12.745)
+^Croot@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# java -jar java-digitalocean-app.jar
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.11)
+
+2025-04-02 21:11:38.611  INFO 23282 --- [           main] com.coditorium.sandbox.Application       : Starting Application using Java 1.8.0_442 on ubuntu-s-1vcpu-512mb-10gb-sfo3-01 with PID 23282 (/root/java-digitalocean-app.jar started by root in /root)
+2025-04-02 21:11:38.616  INFO 23282 --- [           main] com.coditorium.sandbox.Application       : No active profile set, falling back to 1 default profile: "default"
+2025-04-02 21:11:38.836  INFO 23282 --- [           main] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-04-02 21:11:42.087  INFO 23282 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 7071 (http)
+2025-04-02 21:11:42.135  INFO 23282 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-04-02 21:11:42.138  INFO 23282 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2025-04-02 21:11:42.501  INFO 23282 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-04-02 21:11:42.501  INFO 23282 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3663 ms
+2025-04-02 21:11:44.051  INFO 23282 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-04-02 21:11:44.653  INFO 23282 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 7071 (http) with context path ''
+2025-04-02 21:11:44.707  INFO 23282 --- [           main] com.coditorium.sandbox.Application       : Started Application in 7.934 seconds (JVM running for 9.332)
+2025-04-02 21:12:01.296  INFO 23282 --- [nio-7071-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-04-02 21:12:01.296  INFO 23282 --- [nio-7071-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-04-02 21:12:01.303  INFO 23282 --- [nio-7071-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2025-04-02 21:12:03.195  INFO 23282 --- [nio-7071-exec-4] c.c.sandbox.country.CountriesEndpoint    : GET /countries
+^Croot@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# java -jar java-digitalocean-app.jar &
+[1] 23785
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.11)
+
+2025-04-02 21:13:01.147  INFO 23785 --- [           main] com.coditorium.sandbox.Application       : Starting Application using Java 1.8.0_442 on ubuntu-s-1vcpu-512mb-10gb-sfo3-01 with PID 23785 (/root/java-digitalocean-app.jar started by root in /root)
+2025-04-02 21:13:01.164  INFO 23785 --- [           main] com.coditorium.sandbox.Application       : No active profile set, falling back to 1 default profile: "default"
+2025-04-02 21:13:01.485  INFO 23785 --- [           main] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-04-02 21:13:05.774  INFO 23785 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 7071 (http)
+2025-04-02 21:13:05.824  INFO 23785 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-04-02 21:13:05.826  INFO 23785 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2025-04-02 21:13:06.141  INFO 23785 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-04-02 21:13:06.141  INFO 23785 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4649 ms
+2025-04-02 21:13:07.964  INFO 23785 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-04-02 21:13:08.552  INFO 23785 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 7071 (http) with context path ''
+2025-04-02 21:13:08.597  INFO 23785 --- [           main] com.coditorium.sandbox.Application       : Started Application in 10.535 seconds (JVM running for 12.627)
+^C
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# ps aux | grep java
+root       23785 21.4 23.9 2034012 112132 pts/0  Sl   21:12   0:12 java -jar java-digitalocean-app.jar
+root       24160  0.0  0.4   7152  2132 pts/0    S+   21:13   0:00 grep --color=auto java
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# apt install net-tools
+Installing:
+  net-tools
+
+Summary:
+  Upgrading: 0, Installing: 1, Removing: 0, Not Upgrading: 72
+  Download size: 204 kB
+  Space needed: 807 kB / 6800 MB available
+
+Get:1 http://mirrors.digitalocean.com/ubuntu oracular/main amd64 net-tools amd64 2.10-1.1ubuntu1 [204 kB]
+Fetched 204 kB in 0s (1052 kB/s)
+Selecting previously unselected package net-tools.
+(Reading database ... 108665 files and directories currently installed.)
+Preparing to unpack .../net-tools_2.10-1.1ubuntu1_amd64.deb ...
+Unpacking net-tools (2.10-1.1ubuntu1) ...
+Setting up net-tools (2.10-1.1ubuntu1) ...
+Processing triggers for man-db (2.12.1-3) ...
+Scanning processes...
+Scanning candidates...
+Scanning linux images...
+
+Pending kernel upgrade!
+Running kernel version:
+  6.11.0-9-generic
+Diagnostics:
+  The currently running kernel version is not the expected kernel version 6.11.0-21-generic.
+
+Restarting the system to load the new kernel will not be handled automatically, so you should consider rebooting.
+
+Restarting services...
+
+Service restarts being deferred:
+ /etc/needrestart/restart.d/dbus.service
+ systemctl restart getty@tty1.service
+ systemctl restart serial-getty@ttyS0.service
+ systemctl restart systemd-logind.service
+ systemctl restart unattended-upgrades.service
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# netstat -ltnp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1/systemd
+tcp        0      0 127.0.0.54:53           0.0.0.0:*               LISTEN      12792/systemd-resol
+tcp        0      0 127.0.0.1:6010          0.0.0.0:*               LISTEN      20455/sshd: root@pt
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      12792/systemd-resol
+tcp6       0      0 :::22                   :::*                    LISTEN      1/systemd
+tcp6       0      0 :::7071                 :::*                    LISTEN      23785/java
+tcp6       0      0 ::1:6010                :::*                    LISTEN      20455/sshd: root@pt
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# kill 23785
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# netstat -ltnp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1/systemd
+tcp        0      0 127.0.0.54:53           0.0.0.0:*               LISTEN      12792/systemd-resol
+tcp        0      0 127.0.0.1:6010          0.0.0.0:*               LISTEN      20455/sshd: root@pt
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      12792/systemd-resol
+tcp6       0      0 :::22                   :::*                    LISTEN      1/systemd
+tcp6       0      0 ::1:6010                :::*                    LISTEN      20455/sshd: root@pt
+[1]+  Exit 143                java -jar java-digitalocean-app.jar
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# netstat -ltnp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1/systemd
+tcp        0      0 127.0.0.54:53           0.0.0.0:*               LISTEN      12792/systemd-resol
+tcp        0      0 127.0.0.1:6010          0.0.0.0:*               LISTEN      20455/sshd: root@pt
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      12792/systemd-resol
+tcp6       0      0 :::22                   :::*                    LISTEN      1/systemd
+tcp6       0      0 ::1:6010                :::*                    LISTEN      20455/sshd: root@pt
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# adduser paul
+info: Adding user `paul' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `paul' (1000) ...
+info: Adding new user `paul' (1000) with group `paul (1000)' ...
+info: Creating home directory `/home/paul' ...
+info: Copying files from `/etc/skel' ...
+New password:
+Retype new password:
+passwd: password updated successfully
+Changing the user information for paul
+Enter the new value, or press ENTER for the default
+        Full Name []: Paul
+        Room Number []:
+        Work Phone []:
+        Home Phone []:
+        Other []:
+Is the information correct? [Y/n] y
+info: Adding new user `paul' to supplemental / extra groups `users' ...
+info: Adding user `paul' to group `users' ...
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~#
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# usermod -aG sudo paul
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# su - paul
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$ exit
+logout
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# su - paul
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$ ls
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$ pwd
+/home/paul
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$ ls -al
+total 24
+drwxr-x--- 2 paul paul 4096 Apr  2 21:19 .
+drwxr-xr-x 3 root root 4096 Apr  2 21:17 ..
+-rw------- 1 paul paul    5 Apr  2 21:19 .bash_history
+-rw-r--r-- 1 paul paul  220 Apr  2 21:17 .bash_logout
+-rw-r--r-- 1 paul paul 3771 Apr  2 21:17 .bashrc
+-rw-r--r-- 1 paul paul    0 Apr  2 21:17 .cloud-locale-test.skip
+-rw-r--r-- 1 paul paul  807 Apr  2 21:17 .profile
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$ mkdir .ssh
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$ sudo vim .ssh/authorized_keys
+[sudo] password for paul:
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$ ls -al ~/.ssh
+total 12
+drwxrwxr-x 2 paul paul 4096 Apr  2 21:23 .
+drwxr-x--- 3 paul paul 4096 Apr  2 21:23 ..
+-rw-r--r-- 1 root root  104 Apr  2 21:23 authorized_keys
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$ cat ~/.ssh/authorized_keys
+ssh_redacted
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$ exit
+logout
+root@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~# logout
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Session stopped
+    - Press <Return> to exit tab
+    - Press R to restart session
+    - Press S to save terminal output to file
+
+
+
+
+Confirming ssh access for the new user:
+
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Orion> ssh paul@24.144.83.13
+Welcome to Ubuntu 24.10 (GNU/Linux 6.11.0-9-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Wed Apr  2 21:28:11 UTC 2025
+
+  System load:  0.0               Processes:             115
+  Usage of /:   25.9% of 8.55GB   Users logged in:       1
+  Memory usage: 42%               IPv4 address for eth0: 24.144.83.13
+  Swap usage:   0%                IPv4 address for eth0: 10.48.0.5
+
+73 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+
+*** System restart required ***
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$ pwd
+/home/paul
+paul@ubuntu-s-1vcpu-512mb-10gb-sfo3-01:~$ exit
+logout
+Connection to 24.144.83.13 closed.
+PS C:\Users\Orion>

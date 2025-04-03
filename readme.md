@@ -24,12 +24,18 @@ The Droplet was created using the **DigitalOcean web interface**. The following 
 - **Image:** Ubuntu 24.10
 - **Size:** 1 vCPU, 512 MB RAM
 - **Region:** San Francisco
-- **Authentication:** SSH Key
+- **Authentication:** SSH Key<br /><br />
+
+![image](https://github.com/user-attachments/assets/b3e63cbd-34b6-4255-8414-d70535e1b4da)
+
 
 ### 2. Configure Firewall Rules
 A firewall was set up with the following inbound rules:
 - **Port 22 (SSH):** Allowed only from my IP address for secure access
-- **Port 7071:** Open to all inbound traffic since the application listens on this port
+- **Port 7071:** Open to all inbound traffic since the application listens on this port<br /><br />
+
+![image](https://github.com/user-attachments/assets/05a7ba46-d94a-4b20-a4e2-2ce7fbbee6ad)
+
 
 ### 3. Connect to the Droplet
 ```bash
